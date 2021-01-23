@@ -8,7 +8,7 @@
 // }
 
 // class MyDocument extends Document implements MyDocumentInterface {
-//   url = 'https://example.com'
+//   url = process.env.NEXT_PUBLIC_SITE_URL
 //   title = 'Demo Next.js'
 //   description = 'Demo of Next.js'
 
