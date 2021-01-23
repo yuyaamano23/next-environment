@@ -1,5 +1,5 @@
 module.exports = {
   semi: false,
-  arrowParens: "always",
+  arrowParens: 'always',
   singleQuote: true,
-};
+}
