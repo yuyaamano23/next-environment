@@ -449,3 +449,27 @@ lint-staged を実行する NPM スクリプトを追記します。
 ### 9.2 husky の追加
 
 [husky](https://typicode.github.io/husky/#/) はコミットやプッシュの前にテストなどを実行して、失敗したら止めることができる Git hooks を簡単に設定することがツールです。
+
+#### 9.2.1 インストール
+
+```zsh
+$ yarn add -D  husky@next
+```
+
+#### 9.2.2 Git hooks の有効化
+
+```
+$ yarn husky install
+```
+
+#### 9.2.3 フックスクリプトを追加
+
+Git コマンド実行時に以下の処理を実行するようにします。
+
+- コミット前にステージにあるファイルを対象に ESLint の実行
+- プッシュ前にすべてのテストの実行
+
+```
+$ yarn husky add pre-commit "yarn lint-staged"
+$ yarn husky add pre-push "yarn test"
+```
