@@ -16,7 +16,7 @@ $ mkdir next-project
 ```
 
 **Next.js のプロジェクトをセットアップ**<br>
-oNext.js で v9.1 から src に pages などを入れることができるらしいンゴ。<br>のちのち複雑になる可能性を考えて src ディレクトリへ移動しておくことにする。
+Next.js で v9.1 から src に pages などを入れることができるらしいンゴ。<br>のちのち複雑になる可能性を考えて src ディレクトリへ移動しておくことにする。
 
 ```
 $ yarn create next-app .
@@ -46,7 +46,7 @@ $ yarn dev
 
 ### 2.2 TS ファイルに変換
 
-```
+```zsh
 $ find src/pages -name "_app.js" -or -name "index.js" | sed 'p;s/.js$/.tsx/' | xargs -n2 mv
 $ find src/pages/api -name "*.js" | sed 'p;s/.js$/.ts/' | xargs -n2 mv
 ```
@@ -99,7 +99,7 @@ _tsconfig.json_ ↓
 
 各コンポーネントのモジュールインポートの指定を、ベース URL 指定に変更するよー。
 
-```
+```zsh
 $ sed -i '' -e 's/..\/styles/styles/' src/pages/_app.tsx
 $ sed -i '' -e 's/..\/styles/styles/' src/pages/index.tsx
 ```
@@ -122,13 +122,13 @@ $ yarn add -D sass
 
 `src/styles`ディレクトリ内の CSS ファイルを SASS ファイルに変換するよー。
 
-```
+```zsh
 $ find src/styles -name "*.css" | sed 'p;s/.css$/.scss/' | xargs -n2 mv
 ```
 
 ### 5.3 SASS ファイルを読み込むように変更
 
-```
+```zsh
 $ sed -i '' -e 's/\.css/\.scss/' src/pages/_app.tsx
 $ sed -i '' -e 's/\.css/\.scss/' src/pages/index.tsx
 ```
@@ -283,7 +283,7 @@ Next.js の設定ファイルの先頭に eslint-disable を設定する。
 
 #### 7.2.4 gitignore にリポジトリで管理しないファイルを追記
 
-```
+```zsh
 # ESLint のキャッシュファイルを追加
 .eslintcache
 ```
@@ -292,10 +292,129 @@ Next.js の設定ファイルの先頭に eslint-disable を設定する。
 
 `package.json`
 
-```
+```json
 {
   "scripts": {
     "lint": "eslint --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore ."
   }
 }
 ```
+
+問題なく Lint が通るか確認します。
+
+```
+$ yarn lint
+```
+
+**もし通らない場合は fix オプションをつけて `yarn lint --fix` と実行することで、整形可能なものに関しては自動整形することができます。**
+
+### 7.3 VSCode の設定
+
+VSCode の設定ファイルを追加します。
+
+```
+$ mkdir .vscode
+$ touch .vscode/settings.json
+```
+
+以下を設定することファイルの**保存時に自動整形**することができます。
+
+`settings.json`
+
+```json
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ]
+}
+```
+
+## 8. テストの追加
+
+今回は Jest （Unit テスト）を採用
+
+### 8.1 Jest を追加
+
+```zsh
+# Jest 関連モジュールをインストール
+$ yarn add -D jest identity-obj-proxy
+
+# Jest の TypeScript に関するモジュールをインストール
+$ yarn add -D ts-jest @types/jest
+```
+
+### 8.2 設定ファイルの追加
+
+```
+$ touch jest.config.js
+```
+
+```js
+module.exports = {
+  preset: 'ts-jest',
+  roots: ['<rootDir>/src'],
+  moduleNameMapper: {
+    // CSS モックをモックする設定
+    '\\.(css|scss)$': 'identity-obj-proxy',
+    // pages と components ディレクトリのエイリアスを設定（必要であれば他のディレクトリも追加）
+    '^(pages|components)/(.+)': '<rootDir>/src/$1/$2',
+  },
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
+  globals: {
+    'ts-jest': {
+      tsconfig: {
+        jsx: 'react',
+      },
+    },
+  },
+}
+```
+
+### 8.3 NPM スクリプトの追加
+
+テストを実行する為の NPM スクリプトを追記します。<br>
+`package.json`
+
+```json
+{
+  "scripts": {
+    "test": "jest src/__tests__/.*/*.test.tsx?$"
+  }
+}
+```
+
+### 8.4 テストモックの追加
+
+適当なテストを書いてみます。
+
+```zsh
+$ mkdir src/__tests__
+$ touch src/__tests__/Sample.test.tsx
+```
+
+`Smaple.test.tsx`
+
+```js
+/// <reference types="jest" />
+
+import React from 'react'
+import Home from 'pages/index'
+
+it('Home ページコンポーネントが存在している', () => {
+  expect(Home).toBeTruthy()
+})
+```
+
+問題なくテストが動作しているか確認します。
+
+```zsh
+$ yarn test
+```
+
+エラーにならずに書いたテストをパスしていれば問題ないです。
