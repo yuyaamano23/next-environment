@@ -448,6 +448,10 @@ lint-staged を実行する NPM スクリプトを追記します。
 
 ### 9.2 husky の追加
 
+## なんかうまく行かないですンゴ
+
+https://www.youtube.com/watch?v=R35LJL6a-p0&t=1762s
+
 [husky](https://typicode.github.io/husky/#/) はコミットやプッシュの前にテストなどを実行して、失敗したら止めることができる Git hooks を簡単に設定することがツールです。
 
 #### 9.2.1 インストール
@@ -472,4 +476,22 @@ Git コマンド実行時に以下の処理を実行するようにします。
 ```
 $ yarn husky add pre-commit "yarn lint-staged"
 $ yarn husky add pre-push "yarn test"
+```
+
+#### 10. 環境変数の追加
+
+```
+$ touch .env.development
+$ touch .env.production
+```
+
+Document コンポーネントのサイト URL に環境変数を設定します。
+
+`_document.tsx`
+
+```js
+class MyDocument extends Document implements MyDocumentInterface {
+  // 環境変数を追加
+  url = process.env.NEXT_PUBLIC_SITE_URL
+}
 ```
