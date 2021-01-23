@@ -418,3 +418,34 @@ $ yarn test
 ```
 
 エラーにならずに書いたテストをパスしていれば問題ないです。
+
+## 9. フックスクリプトの追加
+
+リポジトリへのコミットやプッシュの際に、事前に Lint やテストを自動実行できるようにします。<br>
+これによりプロジェクトを健全に保つことができます。
+
+### 9.1 lint-staged の追加
+
+[lint-staged](https://github.com/okonet/lint-staged) は Git のステージに上っているファイルだけを Lint の対象にすることができるツールです。
+
+#### 9.1.1 インストール
+
+```zsh
+$ npx mrm lint-staged
+```
+
+#### 9.1.2 NPM スクリプトに追加
+
+lint-staged を実行する NPM スクリプトを追記します。
+
+```json
+{
+  "scripts": {
+    "lint-staged": "lint-staged"
+  }
+}
+```
+
+### 9.2 husky の追加
+
+[husky](https://typicode.github.io/husky/#/) はコミットやプッシュの前にテストなどを実行して、失敗したら止めることができる Git hooks を簡単に設定することがツールです。
