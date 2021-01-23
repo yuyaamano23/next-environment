@@ -4,7 +4,9 @@ import React from 'react'
 import { NextPage } from 'next'
 
 const Home: NextPage = () => {
-  return <div>Hello, World!</div>
+  // return <div>Hello, World!</div>
 }
+
+const test = 'Hello'
 
 export default Home
