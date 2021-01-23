@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore .",
+    "lint-staged": "lint-staged",
     "test": "jest src/__tests__/.*/*.test.tsx?$"
   },
   "dependencies": {
