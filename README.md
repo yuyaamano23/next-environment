@@ -63,6 +63,9 @@ $ find src/pages/api -name "*.js" | sed 'p;s/.js$/.ts/' | xargs -n2 mv
 
 フロンドエンドで API を作成する予定はないので削除!!!(デスノート:みかみ)
 
+### 2.6 src/types フォルダの作成
+
+TypeScript の Type 置き場を作っておく
 <br>
 
 ## 3. Document コンポーネントを追加
